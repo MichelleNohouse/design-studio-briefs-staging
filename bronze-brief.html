@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>[STAGING] Bronze Brief — Production Request · Design Studio</title>
+<title>Bronze Brief — Production Request · Design Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#001E2E;--deep:#003250;--teal:#00818F;--cyan:#5FEFCF;--amber:#E09A20;--green:#22936A;--red:#C03828;--mist:#EBF3F7;--border:#C5D8E4;--ghost:#F5F9FB;--white:#FFFFFF;--text:#1A3040;--subtle:#5A7080;--auto-bg:#E8F7F4;--auto-bd:#8FCFC8;}
@@ -114,9 +114,7 @@ hr.div{border:none;border-top:1px solid var(--mist);margin:16px 0}
 .agent-iq-notice strong{color:var(--teal)}
 </style>
 </head>
-<body><div style="background:#FF6B35;color:white;text-align:center;padding:8px;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;position:sticky;top:0;z-index:9999">
-⚠️ STAGING ENVIRONMENT — Submissions here are for testing only and will not affect live data
-</div>
+<body>
 <div class="topbar">
   <div class="topbar-brand">
     <span class="ds-wordmark">Design Studio</span>
@@ -382,7 +380,7 @@ async function submitForm(){
       'RefFileContent':refFileData?refFileData.contentBytes:'',
       'RefFileType':refFileData?refFileData.contentType:''
     };
-    fetch('https://default21708defe553461984acf7d307c17e.76.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/01/workflows/3fec15de86884f628caf4a6aabc8f4e2/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=3j4yD_Dh_R_OmaaraJvhg3dPwr7WNANmYxpQpRoANQ8',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(paPayload)}).catch(()=>{});
+    fetch('https://link-directory-search.michelle-nienhuis.workers.dev/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(paPayload)}).catch(()=>{});
   }catch(err){alert('Something went wrong: '+err.message+'. Please try again.');}
 }
 

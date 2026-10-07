@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>[STAGING] Silver Brief — Design Brief · Design Studio</title>
+<title>Silver Brief — Design Brief · Design Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#001E2E;--deep:#003250;--teal:#00818F;--cyan:#5FEFCF;--amber:#E09A20;--green:#22936A;--red:#C03828;--mist:#EBF3F7;--border:#C5D8E4;--ghost:#F5F9FB;--white:#FFFFFF;--text:#1A3040;--subtle:#5A7080;--auto-bg:#E8F7F4;--auto-bd:#8FCFC8;}
@@ -119,9 +119,7 @@ hr.div{border:none;border-top:1px solid var(--mist);margin:16px 0}
 .submit-hint{font-size:12px;color:var(--subtle);text-align:center;margin-top:10px;font-style:italic}
 </style>
 </head>
-<body><div style="background:#FF6B35;color:white;text-align:center;padding:8px;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;position:sticky;top:0;z-index:9999">
-⚠️ STAGING ENVIRONMENT — Submissions here are for testing only and will not affect live data
-</div>
+<body>
 <div class="topbar">
   <div class="topbar-brand">
     <span class="ds-wordmark">Design Studio</span>
@@ -159,16 +157,15 @@ hr.div{border:none;border-top:1px solid var(--mist);margin:16px 0}
       <div class="field"><label>Assignment Name <span class="req">*</span></label><input type="text" id="f-assignment-name" placeholder="Give this project a clear name…"></div>
       <div class="field"><label>Project Type <span class="req">*</span></label>
         <div class="choice-group" id="project-type-group" style="flex-wrap:wrap;gap:8px">
-          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Artwork"><span class="c-dot"></span>Artwork</label>
           <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Branded Mock-Up"><span class="c-dot"></span>Branded Mock-Up</label>
+          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="3D"><span class="c-dot"></span>3D</label>
           <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Catalogue"><span class="c-dot"></span>Catalogue</label>
+          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Packaging"><span class="c-dot"></span>Packaging</label>
           <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Concept / Ideation"><span class="c-dot"></span>Concept / Ideation</label>
-          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Image Editing / Resizing"><span class="c-dot"></span>Image Editing / Resizing</label>
-          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Labels"><span class="c-dot"></span>Labels</label>
           <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Newsletter"><span class="c-dot"></span>Newsletter</label>
           <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Other"><span class="c-dot"></span>Other</label>
           <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Pitch Deck"><span class="c-dot"></span>Pitch Deck</label>
-          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Point of Sale"><span class="c-dot"></span>Point of Sale</label>
+          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Point of Sale / Display"><span class="c-dot"></span>Point of Sale / Display</label>
           <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Presentation Tidy Up"><span class="c-dot"></span>Presentation Tidy Up</label>
         </div>
       </div>
@@ -239,7 +236,11 @@ hr.div{border:none;border-top:1px solid var(--mist);margin:16px 0}
 
 <div class="submit-bar">
   <div class="submit-meta">Brief type: <strong>🥈 Silver — Design Brief</strong></div>
-  <button class="btn-submit" onclick="submitForm()">Submit Brief →</button>
+  <div class="teams-note" style="background:#E8F4FD;border-left:4px solid #0078D4;border-radius:4px;padding:14px 18px;margin-bottom:16px;font-size:13.5px;line-height:1.6;color:#2D3748">
+    <strong style="color:#0078D4">💬 Microsoft Teams</strong><br>
+    When you submit your brief, an active chat will appear in your Teams messages allowing direct contact with the designer assigned to your brief.
+  </div>
+    <button class="btn-submit" onclick="submitForm()">Submit Brief →</button>
   <p class="submit-hint">Please click once only — larger files may take up to 10 seconds to submit. Please wait.</p>
 </div>
 </div>
@@ -438,7 +439,7 @@ async function submitForm(){
       'BrandFileContent':brandFileData?brandFileData.contentBytes:'',
       'BrandFileType':brandFileData?brandFileData.contentType:''
     };
-    fetch('https://default21708defe553461984acf7d307c17e.76.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/01/workflows/3fec15de86884f628caf4a6aabc8f4e2/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=3j4yD_Dh_R_OmaaraJvhg3dPwr7WNANmYxpQpRoANQ8',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(paPayload)}).catch(()=>{});
+    fetch('https://link-directory-search.michelle-nienhuis.workers.dev/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(paPayload)}).catch(()=>{});
   }catch(err){alert('Something went wrong: '+err.message+'. Please try again.');}
 }
 
