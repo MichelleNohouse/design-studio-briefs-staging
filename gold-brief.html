@@ -161,6 +161,10 @@ body{font-family:'DM Sans',sans-serif;font-size:14px;background:var(--mist);colo
 <div class="section-block">
   <div class="section-head"><span class="section-icon">🏷️</span><span class="section-label">Section 1 — Brief Details</span><span class="section-sub">Brand & Country</span></div>
   <div class="section-body">
+    <div style="background:#FFF8E7;border-left:4px solid #D9B461;border-radius:4px;padding:14px 18px;margin-bottom:20px;font-size:13.5px;line-height:1.6;color:#2D3748">
+      <strong style="color:#C9A030">⭐ Gold Brief Note</strong><br>
+      Gold assignments need a kick off meeting with all stakeholders. This should be proposed in parallel with the submission of the brief.
+    </div>
     <div class="grid g2">
       <div class="field"><label>Client <span class="req">*</span></label><input type="text" id="f-brand" placeholder="e.g. Coca-Cola, Unilever, Nike…"></div>
       <div class="field"><label>Brand <span class="req">*</span></label><input type="text" id="f-category" placeholder="e.g. Coca-Cola Classic, Dove, Air Max…"></div>
@@ -169,17 +173,13 @@ body{font-family:'DM Sans',sans-serif;font-size:14px;background:var(--mist);colo
       <div class="field"><label>Assignment Name <span class="req">*</span></label><input type="text" id="f-assignment-name" placeholder="Give this project a clear name…"></div>
       <div class="field"><label>Project Type <span class="req">*</span></label>
         <div class="choice-group" id="project-type-group" style="flex-wrap:wrap;gap:8px">
-          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Artwork"><span class="c-dot"></span>Artwork</label>
-          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Branded Mock-Up"><span class="c-dot"></span>Branded Mock-Up</label>
-          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Catalogue"><span class="c-dot"></span>Catalogue</label>
           <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Concept / Ideation"><span class="c-dot"></span>Concept / Ideation</label>
-          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Image Editing / Resizing"><span class="c-dot"></span>Image Editing / Resizing</label>
-          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Labels"><span class="c-dot"></span>Labels</label>
-          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Newsletter"><span class="c-dot"></span>Newsletter</label>
+          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Event Activation"><span class="c-dot"></span>Event Activation</label>
           <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Pitch Deck"><span class="c-dot"></span>Pitch Deck</label>
           <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Point of Sale"><span class="c-dot"></span>Point of Sale</label>
-          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Presentation Tidy Up"><span class="c-dot"></span>Presentation Tidy Up</label>
-          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Other"><span class="c-dot"></span>Other</label>
+          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Retail Activation"><span class="c-dot"></span>Retail Activation</label>
+          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Retail Display"><span class="c-dot"></span>Retail Display</label>
+          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Sales Promotion"><span class="c-dot"></span>Sales Promotion</label>
         </div>
       </div>
       <div class="field"><label>Connect / Flow Number <span class="opt">(optional)</span></label><input type="text" id="f-connect" placeholder="e.g. FL-12345…"></div>
