@@ -161,6 +161,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--mist);color:var(--text);m
           </div>
           <span class="field-hint">Type at least 2 characters to search the company directory</span>
         </div>
+        <div class="field"><label>Requestor Manager <span class="opt">(optional)</span></label>
+          <div class="owner-wrap">
+            <input type="text" id="f-req-mgr" class="owner-input" placeholder="Search by name…" autocomplete="off">
+            <div class="owner-dropdown" id="req-mgr-dropdown"></div>
+            <input type="hidden" id="f-req-mgr-val">
+          </div>
+        </div>
         <div class="field"><label>Division <span class="req">*</span></label>
           <div class="choice-group" id="division-group">
             <label class="choice-btn" onclick="pickRadio(this,'division-group')"><input type="radio" name="division" value="Transactional"><span class="c-dot"></span>Transactional</label>
