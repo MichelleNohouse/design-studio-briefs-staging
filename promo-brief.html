@@ -85,10 +85,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--mist);color:var(--text);m
 .teams-note{background:#E8F4FD;border-left:4px solid #0078D4;border-radius:6px;padding:12px 16px;margin-bottom:20px;font-size:13px;line-height:1.6;color:var(--text)}
 .teams-note strong{color:#0078D4}
 
-/* Submit button */
-.submit-wrap{text-align:center;padding:8px 0 16px}
-.btn-submit{background:var(--promo);color:#fff;border:none;padding:14px 48px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.3px;transition:background .15s}
-.btn-submit:hover{background:var(--promo-dark)}
+/* Submit bar */
+.submit-bar{background:var(--white);border:1px solid var(--border);border-radius:5px;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:4px}
+.submit-meta{font-size:13px;color:var(--subtle)}.submit-meta strong{color:var(--text)}
+.submit-hint{font-size:12px;color:var(--subtle);width:100%;margin-top:4px}
+.btn-submit{background:var(--promo);color:#fff;border:none;padding:13px 30px;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.3px;transition:background .15s,transform .1s;display:flex;align-items:center;gap:8px}
+.btn-submit:hover{background:var(--promo-dark);transform:translateY(-1px)}
 .btn-submit:disabled{opacity:.5;cursor:not-allowed}
 
 /* Job ID display */
@@ -300,19 +302,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--mist);color:var(--text);m
     </div>
   </div>
 
-  <!-- TEAMS NOTE -->
-  <div style="background:#F0F4F8;border:1px solid #D0DCE8;border-radius:10px;padding:18px 22px;margin-bottom:20px;display:flex;gap:16px;align-items:flex-start">
-    <div style="font-size:22px;line-height:1">💬</div>
-    <div>
-      <div style="font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:#5C7488;margin-bottom:6px">Brief type: 🥈 Silver — Design Brief</div>
-      <div style="font-size:13px;font-weight:700;color:#0B2740;margin-bottom:4px">Microsoft Teams</div>
-      <div style="font-size:13px;color:#4A6070;line-height:1.6">When you submit your brief, an active chat will appear in your Teams messages allowing direct contact with the designer assigned to your brief.</div>
+  <!-- SUBMIT BAR -->
+  <div class="submit-bar">
+    <div class="submit-meta">Brief type: <strong>🥈 Silver — Design Brief</strong></div>
+    <div class="teams-note">
+      <strong>💬 Microsoft Teams</strong><br>
+      When you submit your brief, an active chat will appear in your Teams messages allowing direct contact with the designer assigned to your brief.
     </div>
-  </div>
-
-  <!-- SUBMIT -->
-  <div class="submit-wrap">
     <button class="btn-submit" id="submitBtn" onclick="submitBrief()">Submit Promo Brief →</button>
+    <p class="submit-hint">Please click once only — larger files may take up to 10 seconds to submit. Please wait.</p>
   </div>
 
 </div><!-- /page -->
