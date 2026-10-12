@@ -228,6 +228,26 @@ body{font-family:'DM Sans',sans-serif;background:var(--mist);color:var(--text);m
         </div>
         <div class="field"><label>Due Date for Assignment <span class="opt">(optional)</span></label><input type="date" id="f-due-date"></div>
       </div>
+
+      <!-- Barcode Details — shown only for Barcode Artwork or Shipping Label -->
+      <div id="barcode-block" style="display:none;margin-top:20px;padding:16px 18px;background:var(--label-light,#F0EBF9);border:1px solid var(--label-bd,#C9B8EC);border-radius:10px">
+        <div style="font-weight:600;font-size:0.85rem;color:var(--label,#5B3FA0);margin-bottom:12px;text-transform:uppercase;letter-spacing:.04em">🔲 Barcode Details</div>
+        <div class="grid g2">
+          <div class="field"><label>Barcode Type <span class="req">*</span></label>
+            <div class="choice-group" id="barcode-type-group">
+              <label class="choice-btn" onclick="pickRadio(this,'barcode-type-group')"><input type="radio" name="barcode-type" value="EAN-13"><span class="c-dot"></span>EAN-13</label>
+              <label class="choice-btn" onclick="pickRadio(this,'barcode-type-group')"><input type="radio" name="barcode-type" value="EAN-8"><span class="c-dot"></span>EAN-8</label>
+              <label class="choice-btn" onclick="pickRadio(this,'barcode-type-group')"><input type="radio" name="barcode-type" value="QR Code"><span class="c-dot"></span>QR Code</label>
+              <label class="choice-btn" onclick="pickRadio(this,'barcode-type-group')"><input type="radio" name="barcode-type" value="Code 128"><span class="c-dot"></span>Code 128</label>
+              <label class="choice-btn" onclick="pickRadio(this,'barcode-type-group')"><input type="radio" name="barcode-type" value="Other"><span class="c-dot"></span>Other</label>
+            </div>
+          </div>
+          <div class="field"><label>Barcode Number <span class="opt">(optional)</span></label>
+            <input type="text" id="f-barcode-number" placeholder="e.g. 6901234123457">
+            <span class="field-hint">Enter the full barcode digits if known</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -373,6 +393,11 @@ function pickRadio(el,gid){
   document.querySelectorAll('#'+gid+' .choice-btn').forEach(b=>b.classList.remove('selected'));
   el.classList.add('selected');
   el.querySelector('input').checked=true;
+  if(gid==='project-type-group'){
+    const val=el.querySelector('input').value;
+    const block=document.getElementById('barcode-block');
+    if(block) block.style.display=(val==='Barcode Artwork'||val==='Shipping Label')?'block':'none';
+  }
 }
 
 function toggleCheck(el){
@@ -533,7 +558,11 @@ async function submitForm(){
       'Request ID':rid,
       'Submitted':now.toISOString(),
       'Due Date':val('f-due-date'),
-      'Files Attached':(templateFiles.length||refFiles.length)?'Yes':'No'
+      'Files Attached':(templateFiles.length||refFiles.length)?'Yes':'No',
+      ...(rval('project-type')==='Barcode Artwork'||rval('project-type')==='Shipping Label'?{
+        'Barcode Type':rval('barcode-type'),
+        'Barcode Number':val('f-barcode-number')
+      }:{})
     };
 
     fetch(WORKER_URL+'/submit',{
@@ -564,6 +593,11 @@ async function submitForm(){
       <div class="erow"><span class="ek">Product</span><span class="ev">${val('f-product-name')||'—'}</span></div>
       <div class="erow"><span class="ek">Material</span><span class="ev">${val('f-material')||'—'}</span></div>
       <div class="erow"><span class="ek">Batch Code</span><span class="ev">${val('f-batch')||'—'}</span></div>
+      ${(rval('project-type')==='Barcode Artwork'||rval('project-type')==='Shipping Label')?`
+      <div class="erow"><span class="ek">Barcode Type</span><span class="ev">${rval('barcode-type')||'—'}</span></div>
+      ${val('f-barcode-number')?`<div class="erow"><span class="ek">Barcode Number</span><span class="ev">${val('f-barcode-number')}</span></div>`:''}
+      `:''}
+
       <div class="erow"><span class="ek">Quantity</span><span class="ev">${val('f-qty')||'—'}</span></div>
       <div class="erow"><span class="ek">Label Types</span><span class="ev">${labelTypes||'—'}</span></div>
       <div class="erow"><span class="ek">Languages</span><span class="ev">${languages||'—'}</span></div>
@@ -590,6 +624,8 @@ function resetForm(){
     const sq=b.querySelector('.c-sq');
     if(sq)sq.textContent='';
   });
+  const bb=document.getElementById('barcode-block');
+  if(bb)bb.style.display='none';
   removeFile('template-input','template-display','template-zone');
   removeFile('ref-input','ref-display','ref-zone');
   // Reset importer rows to just one
