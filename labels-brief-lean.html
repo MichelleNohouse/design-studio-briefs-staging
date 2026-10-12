@@ -163,7 +163,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--mist);color:var(--text);m
         </div>
         <div class="field"><label>Requestor Manager</label>
           <div class="owner-wrap">
-            <input type="text" id="f-req-mgr" class="owner-input" placeholder="Search by name…" autocomplete="off">
+            <input type="text" id="f-req-mgr" class="owner-input" placeholder="Search by name…" autocomplete="off" oninput="initReqMgrSearch(this.value)">
             <div class="owner-dropdown" id="req-mgr-dropdown"></div>
             <input type="hidden" id="f-req-mgr-val">
           </div>
@@ -473,6 +473,46 @@ function selectOwner(name,email){
 }
 
 document.addEventListener('DOMContentLoaded',initOwnerSearch);
+
+// Requestor Manager search (same pattern as Assignment Owner)
+let reqMgrTimer = null;
+function initReqMgrSearch(q){
+  const input = document.getElementById("f-req-mgr");
+  const dropdown = document.getElementById("req-mgr-dropdown");
+  input.classList.remove("owner-selected");
+  clearTimeout(reqMgrTimer);
+  if(!q || q.length < 2){ dropdown.classList.remove("open"); return; }
+  dropdown.innerHTML = "<div class="owner-loading">Searching directory…</div>";
+  dropdown.classList.add("open");
+  reqMgrTimer = setTimeout(async () => {
+    const results = await searchOwner(q);
+    if(!results.length){
+      dropdown.innerHTML = "<div class="owner-loading">No matches found — try a different name</div>";
+      return;
+    }
+    dropdown.innerHTML = results.map(u =>
+      "<div class="owner-option" onclick="selectReqMgr( + u.displayName.replace(/'/g,') + , + (u.mail||).replace(/'/g,') + )">" +
+      "<span class="owner-option-name">" + u.displayName + "</span>" +
+      "<span class="owner-option-email">" + (u.mail||"") + (u.jobTitle ? " · " + u.jobTitle : "") + "</span>" +
+      "</div>"
+    ).join("");
+  }, 350);
+}
+function selectReqMgr(name, email){
+  const input = document.getElementById("f-req-mgr");
+  const dropdown = document.getElementById("req-mgr-dropdown");
+  const hidden = document.getElementById("f-req-mgr-val");
+  input.value = name;
+  input.classList.add("owner-selected");
+  if(hidden) hidden.value = email || name;
+  dropdown.classList.remove("open");
+}
+document.addEventListener("click", function(e){
+  const drop = document.getElementById("req-mgr-dropdown");
+  const wrap = document.getElementById("f-req-mgr");
+  if(drop && wrap && !wrap.closest(".owner-wrap").contains(e.target)) drop.classList.remove("open");
+});
+
 </script>
 </body>
 </html>
