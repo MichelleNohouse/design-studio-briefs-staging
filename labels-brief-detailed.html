@@ -229,6 +229,21 @@ body{font-family:'DM Sans',sans-serif;background:var(--mist);color:var(--text);m
         <div class="field"><label>Due Date for Assignment <span class="opt">(optional)</span></label><input type="date" id="f-due-date"></div>
       </div>
 
+      <!-- Care Instructions — shown only for Sew In Label -->
+      <div id="care-block" style="display:none;margin-top:20px;padding:16px 18px;background:var(--label-light,#F0EBF9);border:1px solid var(--label-bd,#C9B8EC);border-radius:10px">
+        <div style="font-weight:600;font-size:0.85rem;color:var(--label,#5B3FA0);margin-bottom:12px;text-transform:uppercase;letter-spacing:.04em">🧺 Care Instructions</div>
+        <div class="field">
+          <label>Care Instructions <span class="req">*</span></label>
+          <textarea id="f-care" rows="5" placeholder="Please include as much detail as possible. Consider covering:
+• Washing — e.g. Machine wash 30°, hand wash only, do not wash
+• Bleaching — e.g. Do not bleach, non-chlorine bleach only
+• Drying — e.g. Tumble dry low, do not tumble dry, dry flat
+• Ironing — e.g. Cool iron (110°), do not iron, iron on reverse
+• Dry Cleaning — e.g. Dry clean only, do not dry clean
+• Any symbol codes or client-specific standards if known"></textarea>
+        </div>
+      </div>
+
       <!-- Barcode Details — shown only for Barcode Artwork or Shipping Label -->
       <div id="barcode-block" style="display:none;margin-top:20px;padding:16px 18px;background:var(--label-light,#F0EBF9);border:1px solid var(--label-bd,#C9B8EC);border-radius:10px">
         <div style="font-weight:600;font-size:0.85rem;color:var(--label,#5B3FA0);margin-bottom:12px;text-transform:uppercase;letter-spacing:.04em">🔲 Barcode Details</div>
@@ -396,8 +411,10 @@ function pickRadio(el,gid){
   el.querySelector('input').checked=true;
   if(gid==='project-type-group'){
     const val=el.querySelector('input').value;
-    const block=document.getElementById('barcode-block');
-    if(block) block.style.display=(val==='Barcode Artwork'||val==='Shipping Label')?'block':'none';
+    const barcodeBlock=document.getElementById('barcode-block');
+    if(barcodeBlock) barcodeBlock.style.display=(val==='Barcode Artwork'||val==='Shipping Label')?'block':'none';
+    const careBlock=document.getElementById('care-block');
+    if(careBlock) careBlock.style.display=(val==='Sew In Label')?'block':'none';
   }
 }
 
@@ -560,6 +577,7 @@ async function submitForm(){
       'Submitted':now.toISOString(),
       'Due Date':val('f-due-date'),
       'Files Attached':(templateFiles.length||refFiles.length)?'Yes':'No',
+      ...(rval('project-type')==='Sew In Label'?{'Care Instructions':val('f-care')}:{}),
       ...(rval('project-type')==='Barcode Artwork'||rval('project-type')==='Shipping Label'?{
         'Barcode Type':rval('barcode-type'),
         'Barcode Number':val('f-barcode-number')
@@ -594,6 +612,7 @@ async function submitForm(){
       <div class="erow"><span class="ek">Product</span><span class="ev">${val('f-product-name')||'—'}</span></div>
       <div class="erow"><span class="ek">Material</span><span class="ev">${val('f-material')||'—'}</span></div>
       <div class="erow"><span class="ek">Batch Code</span><span class="ev">${val('f-batch')||'—'}</span></div>
+      ${rval('project-type')==='Sew In Label'?`<div class="erow"><span class="ek">Care Instructions</span><span class="ev">${val('f-care')||'—'}</span></div>`:''}
       ${(rval('project-type')==='Barcode Artwork'||rval('project-type')==='Shipping Label')?`
       <div class="erow"><span class="ek">Barcode Type</span><span class="ev">${rval('barcode-type')||'—'}</span></div>
       ${val('f-barcode-number')?`<div class="erow"><span class="ek">Barcode Number</span><span class="ev">${val('f-barcode-number')}</span></div>`:''}
@@ -625,6 +644,8 @@ function resetForm(){
     const sq=b.querySelector('.c-sq');
     if(sq)sq.textContent='';
   });
+  const cb=document.getElementById('care-block');
+  if(cb)cb.style.display='none';
   const bb=document.getElementById('barcode-block');
   if(bb)bb.style.display='none';
   removeFile('template-input','template-display','template-zone');
