@@ -157,15 +157,15 @@ hr.div{border:none;border-top:1px solid var(--mist);margin:16px 0}
       <div class="field"><label>Assignment Name <span class="req">*</span></label><input type="text" id="f-assignment-name" placeholder="Give this project a clear name…"></div>
       <div class="field"><label>Project Type <span class="req">*</span></label>
         <div class="choice-group" id="project-type-group" style="flex-wrap:wrap;gap:8px">
-          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="3D"><span class="c-dot"></span>3D</label>
-          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Branded Mock-Up"><span class="c-dot"></span>Branded Mock-Up</label>
-          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Catalogue"><span class="c-dot"></span>Catalogue</label>
-          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Concept / Ideation"><span class="c-dot"></span>Concept / Ideation</label>
-          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Newsletter"><span class="c-dot"></span>Newsletter</label>
-          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Pitch Deck"><span class="c-dot"></span>Pitch Deck</label>
-          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Point of Sale / Display"><span class="c-dot"></span>Point of Sale / Display</label>
-          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Presentation Tidy Up"><span class="c-dot"></span>Presentation Tidy Up</label>
-          <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Other"><span class="c-dot"></span>Other</label>
+          <label class="choice-btn" onclick="pickCheck(this,'project-type-group')"><input type="checkbox" name="project-type"<input type="checkbox" name="project-type" value="3D"><span class="c-dot"></span>3D</label>
+          <label class="choice-btn" onclick="pickCheck(this,'project-type-group')"><input type="checkbox" name="project-type"<input type="checkbox" name="project-type" value="Branded Mock-Up"><span class="c-dot"></span>Branded Mock-Up</label>
+          <label class="choice-btn" onclick="pickCheck(this,'project-type-group')"><input type="checkbox" name="project-type"<input type="checkbox" name="project-type" value="Catalogue"><span class="c-dot"></span>Catalogue</label>
+          <label class="choice-btn" onclick="pickCheck(this,'project-type-group')"><input type="checkbox" name="project-type"<input type="checkbox" name="project-type" value="Concept / Ideation"><span class="c-dot"></span>Concept / Ideation</label>
+          <label class="choice-btn" onclick="pickCheck(this,'project-type-group')"><input type="checkbox" name="project-type"<input type="checkbox" name="project-type" value="Newsletter"><span class="c-dot"></span>Newsletter</label>
+          <label class="choice-btn" onclick="pickCheck(this,'project-type-group')"><input type="checkbox" name="project-type"<input type="checkbox" name="project-type" value="Pitch Deck"><span class="c-dot"></span>Pitch Deck</label>
+          <label class="choice-btn" onclick="pickCheck(this,'project-type-group')"><input type="checkbox" name="project-type"<input type="checkbox" name="project-type" value="Point of Sale / Display"><span class="c-dot"></span>Point of Sale / Display</label>
+          <label class="choice-btn" onclick="pickCheck(this,'project-type-group')"><input type="checkbox" name="project-type"<input type="checkbox" name="project-type" value="Presentation Tidy Up"><span class="c-dot"></span>Presentation Tidy Up</label>
+          <label class="choice-btn" onclick="pickCheck(this,'project-type-group')"><input type="checkbox" name="project-type"<input type="checkbox" name="project-type" value="Other"><span class="c-dot"></span>Other</label>
         </div>
       </div>
       <div class="field"><label>Connect / Flow Number <span class="opt">(optional)</span></label><input type="text" id="f-connect" placeholder="e.g. FL-12345…"></div>
@@ -261,6 +261,16 @@ hr.div{border:none;border-top:1px solid var(--mist);margin:16px 0}
 
 <script>
 const g=id=>document.getElementById(id);
+
+function pickCheck(el,gid){
+  el.classList.toggle('selected');
+  el.querySelector('input').checked = el.classList.contains('selected');
+  if(gid==='project-type-group') triggerProjectType();
+}
+function getCheckedVals(gid){
+  return Array.from(document.querySelectorAll('#'+gid+' input:checked')).map(i=>i.value);
+}
+
 function pickRadio(el,gid){document.querySelectorAll('#'+gid+' .choice-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');el.querySelector('input').checked=true;}
 function toggleCheck(e,el){
   e.preventDefault();
@@ -395,7 +405,7 @@ async function submitForm(){
     fd.append('Client',val('f-brand'));fd.append('Brand',val('f-category'));
     fd.append('Country',val('f-assignment'));fd.append('Assignment Owner',val('f-owner'));
     fd.append('Assignment Name',val('f-assignment-name'));
-    fd.append('Project Type',rval('project-type'));
+    fd.append('Project Type',getCheckedVals('project-type-group').join(', '));
     fd.append('Connect / Flow Number',val('f-connect'));
     fd.append('Region',val('f-market'));fd.append('Division',rval('division'));
     fd.append('Internal Review Date',document.getElementById('f-milestone-internal')?.value||'');
@@ -419,7 +429,7 @@ async function submitForm(){
       'Assignment Owner':val('f-owner'),
       'Region':val('f-market'),
       'Assignment Name':val('f-assignment-name'),
-      'Project Type':rval('project-type'),
+      'Project Type':getCheckedVals('project-type-group').join(', '),
       'Connect / Flow Number':val('f-connect'),
       'Division':rval('division'),
       'Request Details':val('f-request'),

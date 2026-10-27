@@ -143,8 +143,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--mist);color:var(--text);m
         <div class="field"><label>Assignment Name <span class="req">*</span></label><input type="text" id="f-assignment-name" placeholder="Give this project a clear name…"></div>
         <div class="field"><label>Project Type <span class="req">*</span></label>
           <div class="choice-group" id="project-type-group" style="flex-wrap:wrap;gap:8px">
-            <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="2D Artwork"><span class="c-dot"></span>2D Artwork</label>
-            <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="3D Artwork"><span class="c-dot"></span>3D Artwork</label>
+            <label class="choice-btn" onclick="pickCheck(this,'project-type-group')"><input type="checkbox" name="project-type"<input type="checkbox" name="project-type" value="2D Artwork"><span class="c-dot"></span>2D Artwork</label>
+            <label class="choice-btn" onclick="pickCheck(this,'project-type-group')"><input type="checkbox" name="project-type"<input type="checkbox" name="project-type" value="3D Artwork"><span class="c-dot"></span>3D Artwork</label>
           </div>
         </div>
         <div class="field"><label>Connect / Flow Number <span class="opt">(optional)</span></label><input type="text" id="f-connect" placeholder="e.g. FL-12345…"></div>
@@ -256,6 +256,16 @@ function g(id){return document.getElementById(id)}
 function val(id){const el=g(id);return el?el.value.trim():''}
 function rval(name){const r=document.querySelector(`input[name="${name}"]:checked`);return r?r.value:''}
 
+
+function pickCheck(el,gid){
+  el.classList.toggle('selected');
+  el.querySelector('input').checked = el.classList.contains('selected');
+  if(gid==='project-type-group') triggerProjectType();
+}
+function getCheckedVals(gid){
+  return Array.from(document.querySelectorAll('#'+gid+' input:checked')).map(i=>i.value);
+}
+
 function pickRadio(el,gid){
   document.querySelectorAll('#'+gid+' .choice-btn').forEach(b=>b.classList.remove('selected'));
   el.classList.add('selected');
@@ -343,7 +353,7 @@ async function submitForm(){
       'Assignment Name':val('f-assignment-name'),
       'Assignment Owner':val('f-owner'),
       'Region':val('f-market'),
-      'Project Type':rval('project-type'),
+      'Project Type':getCheckedVals('project-type-group').join(', '),
       'Connect / Flow Number':val('f-connect'),
       'Division':rval('division'),
       'Request Details':val('f-request'),
@@ -369,7 +379,7 @@ async function submitForm(){
     fd.append('Assignment Name',val('f-assignment-name'));
     fd.append('Assignment Owner',val('f-owner'));
     fd.append('Region',val('f-market'));
-    fd.append('Project Type',rval('project-type'));
+    fd.append('Project Type',getCheckedVals('project-type-group').join(', '));
     fd.append('Connect / Flow Number',val('f-connect'));
     fd.append('Division',rval('division'));
     fd.append('Request Details',val('f-request'));
@@ -391,7 +401,7 @@ async function submitForm(){
       <div class="erow"><span class="ek">Region</span><span class="ev">${val('f-market')}</span></div>
       ${val('f-parent-job-id')?`<div class="erow"><span class="ek">Parent Job ID</span><span class="ev">${val('f-parent-job-id')}</span></div>`:''}
       <div class="erow"><span class="ek">Assignment Name</span><span class="ev">${val('f-assignment-name')}</span></div>
-      <div class="erow"><span class="ek">Project Type</span><span class="ev">${rval('project-type')}</span></div>
+      <div class="erow"><span class="ek">Project Type</span><span class="ev">${getCheckedVals('project-type-group').join(', ')}</span></div>
       <div class="erow"><span class="ek">Division</span><span class="ev">${rval('division')}</span></div>
       <div class="erow"><span class="ek">Due Date</span><span class="ev">${val('f-due-date')||'—'}</span></div>
       <div class="erow"><span class="ek">Request Details</span><span class="ev">${val('f-request')}</span></div>

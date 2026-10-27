@@ -164,16 +164,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--mist);color:var(--text);m
         <div class="field"><label>Assignment Name <span class="req">*</span></label><input type="text" id="f-assignment-name" placeholder="Give this project a clear name…"></div>
         <div class="field"><label>Project Type <span class="req">*</span></label>
           <div class="choice-group" id="project-type-group">
-            <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Barcode Artwork"><span class="c-dot"></span>Barcode Artwork</label>
-            <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Bottom Artwork"><span class="c-dot"></span>Bottom Artwork</label>
-            <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Carton Label"><span class="c-dot"></span>Carton Label</label>
-            <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Gift Box"><span class="c-dot"></span>Gift Box</label>
-            <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="IM Artwork"><span class="c-dot"></span>IM Artwork</label>
-            <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Pallet Label"><span class="c-dot"></span>Pallet Label</label>
-            <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Polybag Artwork"><span class="c-dot"></span>Polybag Artwork</label>
-            <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Sew In Label"><span class="c-dot"></span>Sew In Label</label>
-            <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Shipping Label"><span class="c-dot"></span>Shipping Label</label>
-            <label class="choice-btn" onclick="pickRadio(this,'project-type-group')"><input type="radio" name="project-type" value="Watermarkings"><span class="c-dot"></span>Watermarkings</label>
+            <label class="choice-btn" onclick="pickCheck(this,'project-type-group')"><input type="checkbox" name="project-type" value="Barcode Artwork"><span class="c-dot"></span>Barcode Artwork</label>
+            <label class="choice-btn" onclick="pickCheck(this,'project-type-group')"><input type="checkbox" name="project-type" value="Bottom Artwork"><span class="c-dot"></span>Bottom Artwork</label>
+            <label class="choice-btn" onclick="pickCheck(this,'project-type-group')"><input type="checkbox" name="project-type" value="Carton Label"><span class="c-dot"></span>Carton Label</label>
+            <label class="choice-btn" onclick="pickCheck(this,'project-type-group')"><input type="checkbox" name="project-type" value="Gift Box"><span class="c-dot"></span>Gift Box</label>
+            <label class="choice-btn" onclick="pickCheck(this,'project-type-group')"><input type="checkbox" name="project-type" value="IM Artwork"><span class="c-dot"></span>IM Artwork</label>
+            <label class="choice-btn" onclick="pickCheck(this,'project-type-group')"><input type="checkbox" name="project-type" value="Pallet Label"><span class="c-dot"></span>Pallet Label</label>
+            <label class="choice-btn" onclick="pickCheck(this,'project-type-group')"><input type="checkbox" name="project-type" value="Polybag Artwork"><span class="c-dot"></span>Polybag Artwork</label>
+            <label class="choice-btn" onclick="pickCheck(this,'project-type-group')"><input type="checkbox" name="project-type" value="Sew In Label"><span class="c-dot"></span>Sew In Label</label>
+            <label class="choice-btn" onclick="pickCheck(this,'project-type-group')"><input type="checkbox" name="project-type" value="Shipping Label"><span class="c-dot"></span>Shipping Label</label>
+            <label class="choice-btn" onclick="pickCheck(this,'project-type-group')"><input type="checkbox" name="project-type" value="Watermarkings"><span class="c-dot"></span>Watermarkings</label>
           </div>
         </div>
         <div class="field"><label>Connect / Flow Number <span class="opt">(optional)</span></label><input type="text" id="f-connect" placeholder="e.g. FL-12345…"></div>
@@ -433,29 +433,42 @@ function pickRadio(el,gid){
   document.querySelectorAll('#'+gid+' .choice-btn').forEach(b=>b.classList.remove('selected'));
   el.classList.add('selected');
   el.querySelector('input').checked=true;
-  if(gid==='project-type-group'){
-    const pt=el.querySelector('input').value;
+}
 
-    // Watermarkings: show watermark panel, hide product panel + conditional blocks
-    const isWM = pt==='Watermarkings';
-    document.getElementById('watermark-panel').style.display = isWM?'block':'none';
-    document.getElementById('product-panel').style.display  = isWM?'none':'block';
+function pickCheck(el,gid){
+  el.classList.toggle('selected');
+  el.querySelector('input').checked=el.classList.contains('selected');
+  if(gid==='project-type-group') triggerProjectType();
+}
 
-    // Material + Dimensions: hide only for Watermarkings (all others show them)
-    // Volume: hide for Sew In Label and Watermarkings
-    const showMatDim = !isWM;
-    const showVol    = !isWM && pt!=='Sew In Label';
-    document.querySelectorAll('.f-material-wrap,.f-dimensions-wrap').forEach(el=>el.style.display=showMatDim?'':'none');
-    document.querySelectorAll('.f-volume-wrap').forEach(el=>el.style.display=showVol?'':'none');
+function getCheckedVals(gid){
+  return Array.from(document.querySelectorAll('#'+gid+' input:checked')).map(i=>i.value);
+}
 
-    // Barcode block: Barcode Artwork or Shipping Label
-    const barcodeBlock=document.getElementById('barcode-block');
-    if(barcodeBlock) barcodeBlock.style.display=(pt==='Barcode Artwork'||pt==='Shipping Label')?'block':'none';
+function triggerProjectType(){
+  const pts = getCheckedVals('project-type-group');
 
-    // Care instructions: Sew In Label only
-    const careBlock=document.getElementById('care-block');
-    if(careBlock) careBlock.style.display=(pt==='Sew In Label')?'block':'none';
-  }
+  // Watermarkings panel: only if Watermarkings is the ONLY selection
+  const onlyWM = pts.length===1 && pts[0]==='Watermarkings';
+  const hasWM  = pts.includes('Watermarkings');
+  const hasNonWM = pts.some(p=>p!=='Watermarkings');
+
+  document.getElementById('watermark-panel').style.display = onlyWM?'block':'none';
+  document.getElementById('product-panel').style.display   = (pts.length===0||hasNonWM)?'block':'none';
+
+  // Material + Dimensions: hide only if sole selection is Watermarkings
+  const showMatDim = !onlyWM;
+  const showVol    = !onlyWM && !pts.includes('Sew In Label');
+  document.querySelectorAll('.f-material-wrap,.f-dimensions-wrap').forEach(el=>el.style.display=showMatDim?'':'none');
+  document.querySelectorAll('.f-volume-wrap').forEach(el=>el.style.display=showVol?'':'none');
+
+  // Barcode block: any selection includes Barcode Artwork or Shipping Label
+  const barcodeBlock=document.getElementById('barcode-block');
+  if(barcodeBlock) barcodeBlock.style.display=(pts.includes('Barcode Artwork')||pts.includes('Shipping Label'))?'block':'none';
+
+  // Care instructions: any selection includes Sew In Label
+  const careBlock=document.getElementById('care-block');
+  if(careBlock) careBlock.style.display=pts.includes('Sew In Label')?'block':'none';
 }
 
 function toggleCheck(el){
@@ -609,7 +622,7 @@ async function submitForm(){
       'Assignment Name':val('f-assignment-name'),
       'Assignment Owner':val('f-owner'),
       'Region':val('f-market'),
-      'Project Type':rval('project-type'),
+      'Project Type':getCheckedVals('project-type-group').join(', '),
       'Connect / Flow Number':val('f-connect'),
       'Division':rval('division'),
       'Request Details':requestDetails,
@@ -617,15 +630,15 @@ async function submitForm(){
       'Submitted':now.toISOString(),
       'Due Date':val('f-due-date'),
       'Files Attached':(templateFiles.length||refFiles.length)?'Yes':'No',
-      ...(rval('project-type')==='Watermarkings'?{
+      ...(getCheckedVals('project-type-group').includes('Watermarkings')?{
         'Source Artwork Reference':val('f-wm-source'),
         'Watermark Text':val('f-wm-text')||'NOT FOR PRINT',
         'Markets / Languages':val('f-wm-markets'),
         'Watermark Notes':val('f-wm-notes'),
         'Due Date':val('f-due-date-wm')
       }:{}),
-      ...(rval('project-type')==='Sew In Label'?{'Care Instructions':val('f-care')}:{}),
-      ...(rval('project-type')==='Barcode Artwork'||rval('project-type')==='Shipping Label'?{
+      ...(getCheckedVals('project-type-group').includes('Sew In Label')?{'Care Instructions':val('f-care')}:{}),
+      ...((getCheckedVals('project-type-group').includes('Barcode Artwork')||getCheckedVals('project-type-group').includes('Shipping Label'))?{
         'Barcode Type':rval('barcode-type'),
         'Barcode Number':val('f-barcode-number')
       }:{})
@@ -654,20 +667,20 @@ async function submitForm(){
       <div class="erow"><span class="ek">Country</span><span class="ev">${val('f-country')}</span></div>
       <div class="erow"><span class="ek">Region</span><span class="ev">${val('f-market')}</span></div>
       <div class="erow"><span class="ek">Assignment Name</span><span class="ev">${val('f-assignment-name')}</span></div>
-      <div class="erow"><span class="ek">Project Type</span><span class="ev">${rval('project-type')}</span></div>
+      <div class="erow"><span class="ek">Project Type</span><span class="ev">${getCheckedVals('project-type-group').join(', ')}</span></div>
       <div class="erow"><span class="ek">Division</span><span class="ev">${rval('division')}</span></div>
-      ${rval('project-type')==='Watermarkings'?`
+      ${getCheckedVals('project-type-group').includes('Watermarkings')?`
       <div class="erow"><span class="ek">Source Artwork</span><span class="ev">${val('f-wm-source')||'—'}</span></div>
       <div class="erow"><span class="ek">Watermark Text</span><span class="ev">${val('f-wm-text')||'NOT FOR PRINT'}</span></div>
       ${val('f-wm-markets')?`<div class="erow"><span class="ek">Markets</span><span class="ev">${val('f-wm-markets')}</span></div>`:''}
       ${val('f-wm-notes')?`<div class="erow"><span class="ek">Notes</span><span class="ev">${val('f-wm-notes')}</span></div>`:''}
-      `:`
+      `:''}
       <div class="erow"><span class="ek">Product</span><span class="ev">${val('f-product-name')||'—'}</span></div>
       <div class="erow"><span class="ek">Material</span><span class="ev">${val('f-material')||'—'}</span></div>
       <div class="erow"><span class="ek">Batch Code</span><span class="ev">${val('f-batch')||'—'}</span></div>
       <div class="erow"><span class="ek">Quantity</span><span class="ev">${val('f-qty')||'—'}</span></div>
-      ${rval('project-type')==='Sew In Label'?`<div class="erow"><span class="ek">Care Instructions</span><span class="ev">${val('f-care')||'—'}</span></div>`:''}
-      ${(rval('project-type')==='Barcode Artwork'||rval('project-type')==='Shipping Label')?`
+      ${getCheckedVals('project-type-group').includes('Sew In Label')?`<div class="erow"><span class="ek">Care Instructions</span><span class="ev">${val('f-care')||'—'}</span></div>`:''}
+      ${(getCheckedVals('project-type-group').includes('Barcode Artwork')||getCheckedVals('project-type-group').includes('Shipping Label'))?`
       <div class="erow"><span class="ek">Barcode Type</span><span class="ev">${rval('barcode-type')||'—'}</span></div>
       ${val('f-barcode-number')?`<div class="erow"><span class="ek">Barcode Number</span><span class="ev">${val('f-barcode-number')}</span></div>`:''}
       `:''}
