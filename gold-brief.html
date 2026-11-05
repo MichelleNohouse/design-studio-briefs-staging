@@ -580,12 +580,12 @@ function initReqMgrSearch(q){
   input.classList.remove("owner-selected");
   clearTimeout(reqMgrTimer);
   if(!q || q.length < 2){ dropdown.classList.remove("open"); return; }
-  dropdown.innerHTML = "<div class="owner-loading">Searching directory…</div>";
+  dropdown.innerHTML = "<div class='owner-loading'>Searching directory…</div>";
   dropdown.classList.add("open");
   reqMgrTimer = setTimeout(async () => {
     const results = await searchOwner(q);
     if(!results.length){
-      dropdown.innerHTML = "<div class="owner-loading">No matches found — try a different name</div>";
+      dropdown.innerHTML = "<div class='owner-loading'>No matches found — try a different name</div>";
       return;
     }
     dropdown.innerHTML = results.map(u =>
